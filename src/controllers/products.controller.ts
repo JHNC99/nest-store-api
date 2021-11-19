@@ -2,18 +2,23 @@ import {
   Controller,
   Get,
   Param,
-  Query,
   Post,
   Body,
   Put,
   Delete,
   HttpCode,
   HttpStatus,
-  Res,
+  /*   ParseIntPipe, */
+  /*   Res, */
 } from '@nestjs/common';
-import { Response } from 'express';
+/* import { Response } from 'express'; */
 import { ProductsService } from 'src/services/products.service';
-
+//Importación de pipe personalizado
+import { ParseIntPipe } from '../common/parse-int.pipe';
+//Importación de dto products
+import { CreateProductDto } from 'src/dtos/products.dto';
+//Importacion de dto update products
+import { UpdateProductDto } from 'src/dtos/products.dto';
 @Controller('products')
 export class ProductsController {
   /* 
@@ -23,11 +28,7 @@ export class ProductsController {
   */
   constructor(private productsService: ProductsService) {}
   @Get('/')
-  getProducts(
-    @Query('limit') limit = 100,
-    @Query('offset') offset = 3,
-    @Query('brand') brand: string,
-  ) {
+  getProducts() {
     //return `products: Limit=> ${limit} offset=> ${offset} brand=> ${brand}`;
     return this.productsService.findAll();
   }
@@ -45,8 +46,8 @@ export class ProductsController {
   }
   @Get(':productId')
   @HttpCode(HttpStatus.ACCEPTED)
-  getProduct(@Res() response: Response, @Param('productId') productId: string) {
-    return this.productsService.findOne(+productId);
+  getProduct(@Param('productId', ParseIntPipe) productId: number) {
+    return this.productsService.findOne(productId);
   }
 
   //Creacion de producto
@@ -54,31 +55,27 @@ export class ProductsController {
   Method:POST
   */
   @Post()
-  create(@Body() payload: any) {
+  create(@Body() payload: CreateProductDto) {
     /* return {
       mensaje: 'acction de crear',
       payload,
     }; */
-    return this.productsService.create(payload);
+    const products = this.productsService.create(payload);
+    return {
+      mensaje: 'Se agrego correctamente el producto',
+      products,
+    };
   }
 
   //Update de un  producto
   @Put(':id')
-  update(@Param() id: number, @Body() payload: any) {
-    return {
-      id,
-      payload,
-    };
+  update(@Param() id: number, @Body() payload: UpdateProductDto) {
+    return this.productsService.update(+id, payload);
   }
 
   //Delete  de un  producto
   @Delete(':id')
   delete(@Param('id') id: number) {
-    return {
-      mensaje: 'Se elemino correctamente',
-      id,
-    };
+    return this.productsService.delete(+id);
   }
-
-  /*  */
 }

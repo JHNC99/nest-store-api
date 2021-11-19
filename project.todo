@@ -35,3 +35,23 @@ estas se dirijen a los controladores
 Truco: Agregar + a un string  para forzar a que sea un entero
 ejemplo:
 +productId
+
+
+@Query('limit') limit = 100,
+@Query('offset') offset = 3,
+@Query('brand') brand: string,
+
+PIPES:  Tiene el objetivo de validar y transformar informacion 
+una de sus funcionalidades es:
+
+la salida de un pipe puede ser la entrada de otro
+
+-. Data Transfer Object=
+son objetos que nos permiten validar i tipar, cuando se envia informacion
+esta nos sirve para actualizar etc
+
+.- Validando parámetros con class-validator y mapped-types
+Esta es una validacion de tipos desde la ejecución
+
+npm install @nestjs/mapped-types class-validator class-transformer
+

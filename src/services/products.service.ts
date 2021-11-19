@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Product } from './entities/product.entity';
 @Injectable()
 export class ProductsService {
@@ -22,8 +22,13 @@ export class ProductsService {
   }
 
   //Muestra un dato por su id
-  findOne(i) {
-    return this.products.filter((product) => product.id == i);
+  findOne(id) {
+    const product = this.products.filter((product) => product.id == id);
+    //Manejo de erreores con thrwo y notFoundException
+    if (!product) {
+      throw new NotFoundException(`Product #${id} not found`);
+    }
+    return product;
   }
 
   /* Crea datos para el arreglo products 
@@ -57,5 +62,15 @@ export class ProductsService {
 
       return this.products[index];
     }
+    return null;
+  }
+
+  /* Borrar producto por su id */
+  delete(id: number) {
+    return (this.products = this.products.filter(
+      (product) => product.id !== id,
+    ));
   }
 }
+
+/* return this.products.splice(0, id); */

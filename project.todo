@@ -1,0 +1,37 @@
+Nota importante: los endpoints con parametros siempre deven ir primero
+para que nno aya ningun error de chocque o se clone el endpoint
+
+
+Nota: si estamos trabajando dentro de un controlador no es necesario la ruta principal
+solo basta con el especifico 
+ejemplo
+    Antes:
+        @Get('products/filter')
+    Ahora 
+        @Get('filter');
+
+
+
+Decoradores 🅰️
+nos ayuda a decorar las peticiones 
+repsonse podriamos sacar un token
+
+Ingectable()
+inyeccion de depencencias 
+estas se dirijen a los controladores 
+
+ 
+.- Codigo estilo express
+    response.status(200).send({
+      mensaje: `Product ${params.productId}`,
+    });
+    
+.- Codigo estilo nest
+    return {
+      mensaje: `Product ${params.productId}`,
+    } 
+
+
+Truco: Agregar + a un string  para forzar a que sea un entero
+ejemplo:
++productId
